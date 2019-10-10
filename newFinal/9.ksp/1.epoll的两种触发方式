@@ -1,0 +1,48 @@
+1.epoll的两种触发方式
+2.进程间通信：内存共享怎么保持一致性
+3.prim算法
+4.kruskal算法
+
+typedef pair<int, int> IIPair;
+
+struct cmp {
+    bool operator()(const IIPair &left, const IIPair &right) const
+    {
+        return left.second > right.second;
+    }
+};
+
+
+vector<int> topKFrequent(vector<int>& nums, int k) {
+    unordered_map<int, int> mp;
+    for (auto i : nums) {
+        mp[i]++;
+    }
+    
+    priority_queue<IIPair, vector<IIPair>, cmp> q; // 创建一个小顶堆
+    
+    for (auto item : mp) {
+        if (q.size() < k) {
+            q.push(item);
+        } else if (item.second > q.top().second) {
+            q.pop();
+            q.push(item);
+        }
+        // 新的元素频次小于堆顶元素频次的元素不处理。
+    }
+    
+    vector<int> ret(q.size(), 0);
+    
+    while (!q.empty()) {
+        ret[q.size()-1] = q.top().first;
+        q.pop();
+    }
+    
+    return ret;
+}
+
+
+作者：nchkdxlq
+链接：https://leetcode-cn.com/problems/two-sum/solution/hashmaptong-ji-pin-ci-you-xian-du-lie-by-nchkdxlq/
+来源：力扣（LeetCode）
+著作权归作者所有。商业转载请联系作者获得授权，非商业转载请注明出处。
